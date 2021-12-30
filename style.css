@@ -3,6 +3,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .content {
@@ -71,10 +72,17 @@ button {
     /*border: 0.0005em solid;*/
     border: none;
     box-shadow: 0 0 3px black;
+    transition: all 0.12s ease ;
 }
 
 button:hover {
    background-color: rgb(220, 220, 220);
+}
+
+.animation {
+    
+    border: 1px solid silver;
+    transform: scale(1.01);
 }
 
 

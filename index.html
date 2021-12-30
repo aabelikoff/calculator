@@ -11,34 +11,37 @@
     <title>Calculator</title>
 </head>
 <body>
+     
     <div class="content">
-        <p>CALCULATOR&#174;</p>
+        <p></p>
         <div class="display">
             <div class="expression"></div>
             <div class="numbers">0</div>
         </div>
         <div class="buttons">
-            <button class="clear" >CE</button>
+            <button class="clear" data-key='Escape'>CE</button>
             <button class="oper" data-key='^'>X<sup>a</sup></button>
-            <button class="backspace">&#8592</button>
+            <button class="backspace" data-key='Backspace'>&#8592</button>
             <button class="oper" data-key='/'>&divide</button>
-            <button class="num">7</button>
-            <button class="num">8</button>
-            <button class="num">9</button>
+            <button class="num" data-key='7'>7</button>
+            <button class="num" data-key='8'>8</button>
+            <button class="num" data-key='9'>9</button>
             <button class="oper" data-key='*'>&times</button>
-            <button class="num">4</button>
-            <button class="num">5</button>
-            <button class="num">6</button>
+            <button class="num" data-key='4'>4</button>
+            <button class="num" data-key='5'>5</button>
+            <button class="num" data-key='6'>6</button>
             <button class="oper" data-key='-'>&#8722;</button>
-            <button class="num">1</button>
-            <button class="num">2</button>
-            <button class="num">3</button>
+            <button class="num" data-key='1'>1</button>
+            <button class="num" data-key='2'>2</button>
+            <button class="num" data-key='3'>3</button>
             <button class="oper" data-key='+'>+</button>
             <button class="minus" data-key='+/-'>+/-</button>
-            <button class="num">0</button>
-            <button class="point">&bull;</button>
-            <button class="compute">=</button>
+            <button class="num" data-key='0'>0</button>
+            <button class="point" data-key='.'>&bull;</button>
+            <button class="compute" data-key='='>=</button>
         </div>
-    </div>    
+    </div>
+    <p> Click or press keys for calculation</p> 
+    <p>Created by aabelikoff &reg;</p>
 </body>
 </html>

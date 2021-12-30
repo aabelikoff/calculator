@@ -63,7 +63,12 @@ numberButtons.forEach(elem => elem.addEventListener('click', pressNumber));
 
 function pressNumber (e) {
     if (expression.length < 16) {
-        expression+= e.target.textContent;
+       if (e.type === 'click'){
+            expression+= e.target.getAttribute('data-key');
+       }
+       else {
+            expression+= e.key;
+       }
         if (expression === '00') {
             expression = expression.slice(0,1);
         }
@@ -94,57 +99,10 @@ function pressPoint () {
     }
 }
 
-
-//Screen visualization. Includes visualization of full expression. Use bubbling property
-let content = document.querySelector(".content");
-let numbers = document.querySelector(".numbers");
-let exp = document.querySelector('.expression');
-
-content.addEventListener('click', visualizeScreen);
-function visualizeScreen (e) {
-    if (e.target.getAttribute('class') === 'num' ||
-        e.target.getAttribute('class') === 'point' ||
-        e.target.getAttribute('class') === 'minus') {
-        
-        if( exp.textContent.indexOf('=') !== -1) {
-            exp.textContent = '';
-        }
-        numbers.textContent = expression.length ? expression : '0';
-    }
-    else if (e.target.getAttribute('class') === 'oper'){
-        numbers.textContent = e.target.textContent !== 'Xa' ? e.target.textContent : '^';
-        exp.textContent = dataForCompute.string;
-    }
-    else if (e.target.getAttribute('class') === 'compute'){
-        if (dataForCompute.result !== undefined){
-            numbers.textContent = filterDigits(dataForCompute.result,16);
-        }
-        else {
-            numbers.textContent = 0;
-        }
-        exp.textContent = dataForCompute.string;
-    }
-    else if (e.target.getAttribute('class') === 'clear'){
-        numbers.textContent = '0';
-        exp.textContent = '';
-    }
-    else if (e.target.getAttribute('class') === 'backspace'){
-        if (!expression.length){
-            numbers.textContent = '0';
-            return;
-        }
-        else {
-            numbers.textContent = expression;
-        }
-    }
-}
-
 //Displaying only 16 digits of result
 function filterDigits (number, size){
     let str = `${number}`;
-    console.log(number);
-
-    if (str.length <= size ){
+      if (str.length <= size ){
         return str;
     }
     else if (str.indexOf('e') === -1) {
@@ -164,8 +122,6 @@ function pressOper (e) {
     if (!isNaN(parseFloat(expression)) && !dataForCompute.operator && dataForCompute.result === undefined){
         dataForCompute.firstNumber =  parseFloat(expression);
         expression='';
-       // dataForCompute.operator = e.target.getAttribute('data-key');
-       // dataForCompute.makeString('part');   
     }
     else if (!isNaN(parseFloat(expression)) && dataForCompute.operator && dataForCompute.result === undefined){
         dataForCompute.secondNumber =  parseFloat(expression);
@@ -181,10 +137,15 @@ function pressOper (e) {
     else if (isNaN(parseFloat(expression)) && !dataForCompute.operator && dataForCompute.result === undefined){
         dataForCompute.firstNumber = 0;
     }
-    dataForCompute.operator = e.target.getAttribute('data-key');
+    if (e.type === 'click'){
+        dataForCompute.operator = e.target.getAttribute('data-key');
+    }
+    else {
+        dataForCompute.operator = e.key;
+    }
     dataForCompute.makeString('part');
 }
-//Event handler for = button
+//Event handler for '=' button
 let compute = document.querySelector('.compute');
 compute.addEventListener('click', calculate);
 
@@ -206,25 +167,17 @@ function calculate () {
         else if (dataForCompute.operator && dataForCompute.result !== undefined) {
             dataForCompute.firstNumber = dataForCompute.result;
         }
-        /*else if (dataForCompute.operator && dataForCompute.result === undefined){
-            dataForCompute.secondNumber = dataForCompute.firstNumber;
-        }*/
         else if (!dataForCompute.operator && dataForCompute.result === undefined){
             return;
         }
-        /*else {
-            clearAll();
-            return;
-        }*/
     }
     dataForCompute.makeString('full');
     dataForCompute.result = (operate(dataForCompute.firstNumber, dataForCompute.operator, dataForCompute.secondNumber));///
 }
-
+//Clearing data
 function clearAll() {
     dataForCompute.clearData();
-    expression = '';
-    
+    expression = '';  
 }
 
 let clear = document.querySelector('.clear');
@@ -259,9 +212,118 @@ function changePlusMinus (){
     }
 }
 
-window.addEventListener('keypress', (e) =>{
-    console.log(e);
+//Screen visualization. Includes visualization of full expression. Use bubbling property
+let content = document.querySelector(".content");
+let numbers = document.querySelector(".numbers");
+let exp = document.querySelector('.expression');
+
+content.addEventListener('click', visualizeScreen);
+//common function for clicking buttons
+function visualizeScreen (e) {
+    if (e.target.getAttribute('class') === 'num' ||
+        e.target.getAttribute('class') === 'point' ||
+        e.target.getAttribute('class') === 'minus') {
+        visualizeNumbers ();
+    }
+    else if (e.target.getAttribute('class') === 'oper'){
+        numbers.textContent = e.target.getAttribute('data-key');
+        exp.textContent = dataForCompute.string;
+    }
+    else if (e.target.getAttribute('class') === 'compute'){
+        visualizeCompute ();
+    }
+    else if (e.target.getAttribute('class') === 'clear'){
+        visualizeClear ();
+    }
+    else if (e.target.getAttribute('class') === 'backspace'){
+        visualizeBackspace ();
+    }
+}
+//When we click or press number buttons
+function visualizeNumbers () {
+    if( exp.textContent.indexOf('=') !== -1) {
+        exp.textContent = '';
+    }
+    numbers.textContent = expression.length ? expression : '0';
+}
+//when we click '=' o press '=' or 'Enter'
+function visualizeCompute () {
+    if (dataForCompute.result !== undefined){
+        numbers.textContent = filterDigits(dataForCompute.result,16);
+    }
+    else {
+        numbers.textContent = 0;
+    }
+    exp.textContent = dataForCompute.string;
+}
+//when we click AC or press Esc
+function visualizeClear (){
+    numbers.textContent = '0';
+    exp.textContent = '';
+}
+//When we click or press 'Backspace'
+function visualizeBackspace () {
+    if (!expression.length){
+        numbers.textContent = '0';
+        return;
+    }
+    else {
+        numbers.textContent = expression;
+    }
+}
+
+//Event handler for keydown events
+window.addEventListener ('keydown', (e) => {
+    if (!isNaN(parseInt(e.key))){
+        pressNumber(e);
+        visualizeNumbers ()
+    }
+    else if (e.key === '.') {
+        pressPoint();
+        visualizeNumbers ()
+    }
+    else if (e.key === '/' ||
+             e.key === '*' ||
+             e.key === '-' ||
+             e.key === '+' ||
+             e.key === '^' ){
+        pressOper(e);
+        numbers.textContent = e.key;
+        exp.textContent = dataForCompute.string;
+    }
+    else if (e.key === '=' || e.key === 'Enter'){
+        calculate();
+        visualizeCompute ();
+    }
+    else if (e.key === 'Backspace'){
+        cutLastSymbol();
+        visualizeBackspace ();
+    }
+    else if (e.key === 'Escape'){
+        clearAll();
+        visualizeClear ();
+    }
+    animateButtons(e);
 });
-
-
-
+//Animationing clicked or pressed buttons
+let buttons = Array.from(document.querySelectorAll('button'));
+//if buttons are clicked
+buttons.forEach(elem => elem.addEventListener('click',(e) => { 
+    e.target.classList.add('animation');
+})); 
+//if buttons are pressed
+function animateButtons (e) {
+    buttons.forEach(elem => {
+        if (elem.getAttribute('data-key') === e.key ||
+            (elem.getAttribute('data-key') === '=' && e.key === 'Enter')){
+            elem.classList.add('animation');
+            console.log(elem);
+        }
+    });
+}
+//remove animation
+buttons.forEach(elem => elem.addEventListener('transitionend',removeChangeButton));
+function removeChangeButton (e) {
+    if (e.propertyName!=='transform') return;
+    this.classList.remove('animation');
+}
