@@ -1,0 +1,80 @@
+body {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    margin-top: 20px;
+    width: 420px;
+    height: 530px;
+    background-color: rgba(200,200,200,50%);
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+    box-shadow: 0px 0px 20px black;
+}
+.content p {
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    
+}
+
+.numbers {
+    font-size: 300%;
+    text-align: right;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.display {
+    background-color: rgba(150,150,150,80%);
+    margin: 0px 10px 20px 10px;
+}
+.expression {
+    height: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+}
+
+.numbers {
+    height: 80px;
+}
+.buttons {
+    height: 310px;
+    padding: 0px;
+    text-align: center;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.oper, .backspace, .clear, .compute {
+    background-color: rgba(200,200,200,90%);
+    
+}
+
+button {
+    height: 62px;
+    width: 92px;
+    margin: 5px;
+    font-size: xx-large;
+    border-radius: 6px;
+    /*border: 0.0005em solid;*/
+    border: none;
+    box-shadow: 0 0 3px black;
+}
+
+button:hover {
+   background-color: rgb(220, 220, 220);
+}
+
+
