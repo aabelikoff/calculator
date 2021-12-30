@@ -104,7 +104,7 @@ content.addEventListener('click', visualizeScreen);
 function visualizeScreen (e) {
     if (e.target.getAttribute('class') === 'num' ||
         e.target.getAttribute('class') === 'point' ||
-        e.target.getAttribute('class') === 'minus'){
+        e.target.getAttribute('class') === 'minus') {
         
         if( exp.textContent.indexOf('=') !== -1) {
             exp.textContent = '';
@@ -164,28 +164,25 @@ function pressOper (e) {
     if (!isNaN(parseFloat(expression)) && !dataForCompute.operator && dataForCompute.result === undefined){
         dataForCompute.firstNumber =  parseFloat(expression);
         expression='';
-        dataForCompute.operator = e.target.getAttribute('data-key');
-        dataForCompute.makeString('part');   
+       // dataForCompute.operator = e.target.getAttribute('data-key');
+       // dataForCompute.makeString('part');   
     }
     else if (!isNaN(parseFloat(expression)) && dataForCompute.operator && dataForCompute.result === undefined){
         dataForCompute.secondNumber =  parseFloat(expression);
         expression='';
         dataForCompute.result = operate(dataForCompute.firstNumber, dataForCompute.operator, dataForCompute.secondNumber);
         dataForCompute.firstNumber = dataForCompute.result;
-        dataForCompute.operator = e.target.getAttribute('data-key');
-        dataForCompute.makeString('part');
         dataForCompute.result = undefined;
     }
     else if (isNaN(parseFloat(expression)) && dataForCompute.operator && dataForCompute.result !== undefined){
         dataForCompute.firstNumber = dataForCompute.result;
-        dataForCompute.operator = e.target.getAttribute('data-key');
-        dataForCompute.makeString('part');
         dataForCompute.result = undefined;
     }
-    else if (isNaN(parseFloat(expression)) && dataForCompute.operator && dataForCompute.result === undefined){
-        dataForCompute.operator = e.target.getAttribute('data-key');
-        dataForCompute.makeString('part');
+    else if (isNaN(parseFloat(expression)) && !dataForCompute.operator && dataForCompute.result === undefined){
+        dataForCompute.firstNumber = 0;
     }
+    dataForCompute.operator = e.target.getAttribute('data-key');
+    dataForCompute.makeString('part');
 }
 //Event handler for = button
 let compute = document.querySelector('.compute');
@@ -262,7 +259,9 @@ function changePlusMinus (){
     }
 }
 
-window.addEventListener('keydown', (e) =>{
+window.addEventListener('keypress', (e) =>{
     console.log(e);
 });
+
+
 
