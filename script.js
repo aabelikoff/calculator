@@ -131,7 +131,7 @@ function pressOper (e) {
         dataForCompute.result = undefined;
     }
     else if (isNaN(parseFloat(expression)) && dataForCompute.operator && dataForCompute.result !== undefined){
-        dataForCompute.firstNumber = dataForCompute.result;
+        dataForCompute.firstNumber = dataForCompute.result === 'Error' ? 0 : dataForCompute.result; //if we have previous 'Error' 
         dataForCompute.result = undefined;
     }
     else if (isNaN(parseFloat(expression)) && !dataForCompute.operator && dataForCompute.result === undefined){
@@ -212,66 +212,6 @@ function changePlusMinus (){
     }
 }
 
-//Screen visualization. Includes visualization of full expression. Use bubbling property
-let content = document.querySelector(".content");
-let numbers = document.querySelector(".numbers");
-let exp = document.querySelector('.expression');
-
-content.addEventListener('click', visualizeScreen);
-//common function for clicking buttons
-function visualizeScreen (e) {
-    if (e.target.getAttribute('class') === 'num' ||
-        e.target.getAttribute('class') === 'point' ||
-        e.target.getAttribute('class') === 'minus') {
-        visualizeNumbers ();
-    }
-    else if (e.target.getAttribute('class') === 'oper'){
-        numbers.textContent = e.target.getAttribute('data-key');
-        exp.textContent = dataForCompute.string;
-    }
-    else if (e.target.getAttribute('class') === 'compute'){
-        visualizeCompute ();
-    }
-    else if (e.target.getAttribute('class') === 'clear'){
-        visualizeClear ();
-    }
-    else if (e.target.getAttribute('class') === 'backspace'){
-        visualizeBackspace ();
-    }
-}
-//When we click or press number buttons
-function visualizeNumbers () {
-    if( exp.textContent.indexOf('=') !== -1) {
-        exp.textContent = '';
-    }
-    numbers.textContent = expression.length ? expression : '0';
-}
-//when we click '=' o press '=' or 'Enter'
-function visualizeCompute () {
-    if (dataForCompute.result !== undefined){
-        numbers.textContent = filterDigits(dataForCompute.result,16);
-    }
-    else {
-        numbers.textContent = 0;
-    }
-    exp.textContent = dataForCompute.string;
-}
-//when we click AC or press Esc
-function visualizeClear (){
-    numbers.textContent = '0';
-    exp.textContent = '';
-}
-//When we click or press 'Backspace'
-function visualizeBackspace () {
-    if (!expression.length){
-        numbers.textContent = '0';
-        return;
-    }
-    else {
-        numbers.textContent = expression;
-    }
-}
-
 //Event handler for keydown events
 window.addEventListener ('keydown', (e) => {
     if (!isNaN(parseInt(e.key))){
@@ -305,6 +245,65 @@ window.addEventListener ('keydown', (e) => {
     }
     animateButtons(e);
 });
+//Screen visualization. Includes visualization of full expression. Use bubbling property
+let content = document.querySelector(".content");
+let numbers = document.querySelector(".numbers");
+let exp = document.querySelector('.expression');
+content.addEventListener('click', visualizeScreen);
+//When we click or press number buttons
+function visualizeNumbers () {
+    if( exp.textContent.indexOf('=') !== -1) {
+        exp.textContent = '';
+    }
+    numbers.textContent = expression.length ? expression : '0';
+}
+//when we click '=' o press '=' or 'Enter'
+function visualizeCompute () {
+    if (dataForCompute.result !== undefined){
+        numbers.textContent = filterDigits(dataForCompute.result,16);
+    }
+    else {
+        numbers.textContent = 0;
+    }
+    exp.textContent = dataForCompute.string;
+}
+//when we click AC or press Esc
+function visualizeClear (){
+    numbers.textContent = '0';
+    exp.textContent = '';
+}
+//When we click or press 'Backspace'
+function visualizeBackspace () {
+    if (!expression.length){
+        numbers.textContent = '0';
+        return;
+    }
+    else {
+        numbers.textContent = expression;
+    }
+}
+//common function for clicking buttons
+function visualizeScreen (e) {
+    if (e.target.getAttribute('class') === 'num animation' ||
+        e.target.getAttribute('class') === 'point animation' ||
+        e.target.getAttribute('class') === 'minus animation') {
+        
+            visualizeNumbers ();
+    }
+    else if (e.target.getAttribute('class') === 'oper animation'){
+        numbers.textContent = e.target.getAttribute('data-key');
+        exp.textContent = dataForCompute.string;
+    }
+    else if (e.target.getAttribute('class') === 'compute animation'){
+        visualizeCompute ();
+    }
+    else if (e.target.getAttribute('class') === 'clear animation'){
+        visualizeClear ();
+    }
+    else if (e.target.getAttribute('class') === 'backspace animation'){
+        visualizeBackspace ();
+    }
+}
 //Animationing clicked or pressed buttons
 let buttons = Array.from(document.querySelectorAll('button'));
 //if buttons are clicked
@@ -317,7 +316,7 @@ function animateButtons (e) {
         if (elem.getAttribute('data-key') === e.key ||
             (elem.getAttribute('data-key') === '=' && e.key === 'Enter')){
             elem.classList.add('animation');
-            console.log(elem);
+            //console.log(elem);
         }
     });
 }

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Arvo&family=Readex+Pro:wght@200;400&family=Varela+Round&display=swap');
 body {
     box-sizing: border-box;
     display: flex;
@@ -21,7 +22,11 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
-    
+    font-family: 'Varela Round', sans-serif;  
+}
+
+p {
+    font-family: 'Architects Daughter', cursive;
 }
 
 .numbers {
